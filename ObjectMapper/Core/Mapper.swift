@@ -13,6 +13,12 @@ public protocol MapperProtocol {
     init()
 }
 
+
+public protocol EntityMapperProtocol {
+    func map(mapper: Mapper) -> EntityMapperProtocol
+    class func createEntity() -> EntityMapperProtocol
+}
+
 enum MappingType {
     case fromJSON
     case toJSON
@@ -63,16 +69,38 @@ public class Mapper {
         }
         return nil
     }
-    
+
     // maps a JSON dictionary to an object that conforms to MapperProtocol
     public func map<N: MapperProtocol>(JSON: [String : AnyObject], toType type: N.Type) -> N! {
         mappingType = .fromJSON
 
         self.JSONDictionary = JSON
-        
+
         var object = N()
         object.map(self)
-        
+
+        return object
+    }
+
+    // maps a JSON dictionary to an object that conforms to MapperProtocol
+    public func map<N: EntityMapperProtocol>(json : [String : AnyObject], toType type: N.Type) -> N! {
+        mappingType = .fromJSON
+
+        self.JSONDictionary = json
+
+        var object = N.createEntity() as N
+        object.map(self)
+
+        return object
+    }
+
+    // maps a JSON dictionary to an object that conforms to MapperProtocol
+    public func map<N: EntityMapperProtocol>(json : [String : AnyObject], object: N) -> N! {
+        mappingType = .fromJSON
+
+        self.JSONDictionary = json
+        object.map(self)
+
         return object
     }
 
