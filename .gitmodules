@@ -1,0 +1,3 @@
+[submodule "Libraries/sugarrecord"]
+	path = Libraries/sugarrecord
+	url = https://github.com/Foild/SugarRecord.git
