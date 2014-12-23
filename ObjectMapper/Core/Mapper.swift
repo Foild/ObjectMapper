@@ -7,10 +7,15 @@
 //
 
 import Foundation
+import CoreData
 
 public protocol MapperProtocol {
     func map(mapper: Mapper)
     init()
+}
+
+public protocol CoreMapperProtocol {
+    func mapData()
 }
 
 enum MappingType {
@@ -75,7 +80,18 @@ public class Mapper {
         
         return object
     }
-
+    
+    public func mapEntity<N where N: MapperProtocol, N: SugarRecordObjectProtocol>(JSON: [String : AnyObject], toType type: N) -> N! {
+        mappingType = .fromJSON
+        
+        self.JSONDictionary = JSON
+        
+        var object = N()
+        
+        object.map(self)
+        return object
+    }
+    
 	// maps a JSON array to an object that conforms to MapperProtocol
 	public func mapArray<N: MapperProtocol>(string JSONString: String, toType type: N.Type) -> [N]! {
 		var jsonArray = parseJSONArray(JSONString)
