@@ -15,7 +15,7 @@ public protocol MapperProtocol {
 
 
 public protocol EntityMapperProtocol {
-    func map(mapper: Mapper) -> EntityMapperProtocol
+    func map(mapper: Mapper)
     class func createEntity() -> EntityMapperProtocol
 }
 
